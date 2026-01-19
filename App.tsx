@@ -7,13 +7,11 @@ import CreateScreen from './components/CreateScreen';
 import GalleryViewer from './components/GalleryViewer';
 import PromptsScreen from './components/PromptsScreen';
 import FeedScreen from './components/FeedScreen';
-import SideMenu from './components/SideMenu';
 import type { PhotoHuman } from './types';
 import { data } from './services/data';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastProvider } from './context/ToastContext';
-import { PWAProvider } from './context/PWAContext';
 
 // Updated View type to remove unused pages
 type View = 'home' | 'feed' | 'create' | 'prompts';
@@ -21,7 +19,6 @@ type View = 'home' | 'feed' | 'create' | 'prompts';
 function AppContent() {
   const [view, setView] = useState<View>('home');
   const [selectedAlbum, setSelectedAlbum] = useState<PhotoHuman | null>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleCreateAlbum = async (album: Omit<PhotoHuman, 'createdAt' | 'id'>) => {
     try {
@@ -48,10 +45,7 @@ function AppContent() {
 
   return (
     <div className="h-full w-full bg-primary text-text-main flex flex-col font-sans antialiased overflow-hidden transition-colors duration-300">
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
-      
-      <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-
+      <Header />
       <main className="flex-1 overflow-hidden relative">
         {view === 'home' && <HomeScreen onViewAlbum={handleViewAlbum} />}
         {view === 'feed' && <FeedScreen />}
@@ -70,13 +64,11 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <PWAProvider>
-        <ThemeProvider>
-          <ToastProvider>
-            <AppContent />
-          </ToastProvider>
-        </ThemeProvider>
-      </PWAProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }
