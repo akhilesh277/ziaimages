@@ -17,7 +17,8 @@ export class ZiaDataLayer extends Dexie {
     super('ziar-core-storage');
     
     // Schema definition - Designed to be additive for future-proofing
-    this.version(2).stores({
+    // Fix: Cast this to any/Dexie to access version method which might be hidden on subclass type
+    (this as unknown as Dexie).version(2).stores({
       photoHumans: '++id, name, createdAt, updatedAt',
       prompts: '++id, index',
       likes: 'albumId, likedAt' // persistent likes storage
