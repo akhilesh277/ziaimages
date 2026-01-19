@@ -10,9 +10,13 @@ class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   ErrorBoundaryState
 > {
+  // Explicitly declare state and props to satisfy TypeScript strict mode
+  public state: ErrorBoundaryState = { hasError: false, error: null };
+  public override props: { children: React.ReactNode };
+
   constructor(props: { children: React.ReactNode }) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.props = props;
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
